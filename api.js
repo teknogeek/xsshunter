@@ -218,7 +218,7 @@ async function set_up_api_server(app) {
             return res.sendStatus(404);
         }
 
-        const gz_image_path = `${screenshot_filename}.gz`;
+        let gz_image_path = `${screenshot_filename}.gz`;
 
         if (process.env.USE_CLOUD_STORAGE == "true"){
             const storage = new Storage();
@@ -246,6 +246,7 @@ async function set_up_api_server(app) {
                 res.status(404).send(`Error retrieving image from GCS`);
             }
         }else{
+            gz_image_path = path.join(SCREENSHOTS_DIR, gz_image_path);
             const image_exists = await check_file_exists(gz_image_path);
 
             if(!image_exists) {
