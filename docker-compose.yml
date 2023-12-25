@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.7"
 services:
   # XSS Hunter Express service
   xsshunterexpress:
@@ -6,15 +6,13 @@ services:
     env_file:
       - dev.env
     ports:
-      - "127.0.0.1:8080:8080"
+      - "8080:8080"
     volumes:
       # Directory where payload fire images are stored.
       - ./payload-fire-images:/app/payload-fire-images
-    depends_on:
-      postgresdb:
-        condition: service_healthy
-    volumes:
       - ~/.config/gcloud/application_default_credentials.json:/gcloud.json
+    depends_on:
+      - postgresdb
   postgresdb:
     image: postgres
     restart: always
