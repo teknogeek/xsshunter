@@ -489,6 +489,8 @@ async function set_up_api_server(app) {
                 "referer": payload.referer,
                 "user_agent": payload.user_agent,
                 "cookies": payload.cookies,
+                "localStorage": payload.localStorage,
+                "sessionStorage": payload.sessionStorage,
                 "title": payload.title,
                 "origin": payload.origin,
                 "screenshot_id": payload.screenshot_id,

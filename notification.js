@@ -9,8 +9,10 @@ const XSS_PAYLOAD_FIRE_EMAIL_TEMPLATE = fs.readFileSync(
 );
 
 async function send_email_notification(xss_payload_fire_data, email) {
+	xss_payload_fire_data.localStorage = atob(xss_payload_fire_data.localStorage);
+	xss_payload_fire_data.sessionStorage = atob(xss_payload_fire_data.sessionStorage);
 	const notification_html_email_body = mustache.render(
-		XSS_PAYLOAD_FIRE_EMAIL_TEMPLATE, 
+		XSS_PAYLOAD_FIRE_EMAIL_TEMPLATE,
 		xss_payload_fire_data
 	);
 
@@ -27,7 +29,7 @@ async function send_email_notification(xss_payload_fire_data, email) {
 			groupsToDisplay: [
 				parseInt(process.env.SENDGRID_UNSUBSRIBE_GROUP_ID)
 			]
-		},		
+		},
 	}
 	response = await sendgrid
 	.send(msg)
