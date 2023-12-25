@@ -32,7 +32,7 @@ Users.init({
 		primaryKey: true,
 		type: Sequelize.UUID,
 		defaultValue: Sequelize.UUIDV4
-	},   
+	},
     email: {
         type: Sequelize.TEXT,
         allowNull: false,
@@ -92,7 +92,7 @@ Secrets.init({
 		primaryKey: true,
 		type: Sequelize.UUID,
 		defaultValue: Sequelize.UUIDV4
-	},   
+	},
     payload_id: {
         type: Sequelize.TEXT,
         allowNull: false,
@@ -119,7 +119,7 @@ Secrets.init({
 		}
     ]
 });
-	
+
 /*
 	XSS payload fire results
 */
@@ -190,6 +190,18 @@ PayloadFireResults.init({
 	cookies: {
 		type: Sequelize.TEXT,
 		allowNull: true,
+		unique: false
+	},
+	// Local Storage of the page
+	localStorage: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+		unique: false
+	},
+	// Session Storage of the page
+	sessionStorage: {
+		type: Sequelize.TEXT,
+		allowNull: false,
 		unique: false
 	},
 	// Title of the page which the payload fired on.

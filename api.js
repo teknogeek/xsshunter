@@ -402,7 +402,7 @@ async function set_up_api_server(app) {
     		},
     		attributes: ['id', 'screenshot_id', 'encrypted']
     	});
-        if ( process.env.USE_CLOUD_STORAGE == "true"){ 
+        if ( process.env.USE_CLOUD_STORAGE == "true"){
             const storage = new Storage();
             await Promise.all(screenshot_id_records.map(payload => {
                 let filename = ""
@@ -415,11 +415,11 @@ async function set_up_api_server(app) {
             }));
         }else{
             await Promise.all(screenshot_id_records.map(payload => {
-                let filename = "${SCREENSHOTS_DIR}/"
+                let filename = '';
                 if(payload.encrypted){
-                    filename = `${payload.screenshot_id}.b64png.enc.gz`
+                    filename = path.join(SCREENSHOTS_DIR, `${payload.screenshot_id}.b64png.enc.gz`);
                 }else{
-                    fileName = `${payload.screenshot_id}.png.gz`;
+                    filename = path.join(SCREENSHOTS_DIR, `${payload.screenshot_id}.png.gz`);
                 }
                 return asyncfs.unlink(filename);
             }));
@@ -669,7 +669,7 @@ async function set_up_api_server(app) {
         returnObj.chainload_uri = user.additionalJS;
         returnObj.pgp_key = user.pgp_key;
         returnObj.send_alert_emails = user.sendEmailAlerts;
-       
+
         res.status(200).json({
             'success': true,
             'result': returnObj

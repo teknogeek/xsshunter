@@ -27,7 +27,7 @@
                                         </p>
                                     </div>
                                     <div v-else>
-                                        <a class="m-0 w-100 btn-fill" v-bind:href="base_api_path + '/screenshots/' + report.screenshot_id + '.b64png.enc'" target="_blank" class="fas fa-angle-double-down">Download encrypted screenshot</a> 
+                                        <a class="m-0 w-100 btn-fill" v-bind:href="base_api_path + '/screenshots/' + report.screenshot_id + '.b64png.enc'" target="_blank" class="fas fa-angle-double-down">Download encrypted screenshot</a>
                                     </div>
                                     <div class="mt-3 button-full">
                                         <base-button class="m-0 btn-fill" simple type="primary" v-on:click="expand_report(report.id)" v-if="!is_report_id_expanded(report.id)">
@@ -131,6 +131,32 @@
                                             </div>
                                             <div class="m-2 mt-4">
                                                 <pre v-if="report.cookies">{{report.cookies}}</pre>
+                                                <pre v-else><i>None</i></pre>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <p class="report-section-label mr-2">Local Storage</p>
+                                                <small slot="helperText" class="form-text text-muted report-section-description">
+                                                    Local Storage
+                                                </small>
+                                            </div>
+                                            <div class="m-2 mt-4">
+                                                <code v-if="report.localStorage">{{b64decode(report.localStorage)}}</code>
+                                                <pre v-else><i>None</i></pre>
+                                            </div>
+                                            <hr />
+                                        </div>
+                                        <div>
+                                            <div>
+                                                <p class="report-section-label mr-2">Session Storage</p>
+                                                <small slot="helperText" class="form-text text-muted report-section-description">
+                                                    Session Storage.
+                                                </small>
+                                            </div>
+                                            <div class="m-2 mt-4">
+                                                <code v-if="report.sessionStorage">{{b64decode(report.sessionStorage)}}</code>
                                                 <pre v-else><i>None</i></pre>
                                             </div>
                                             <hr />
@@ -295,6 +321,11 @@ export default {
         },
     },
     methods: {
+        b64decode(data) {
+            let buff = new Buffer(data, 'base64');
+            let b64 = buff.toString('ascii');
+            return b64;
+        },
         async delete_payload_fire(payload_id) {
             const result = await api_request.delete_payload_fires([payload_id]);
             this.pull_payload_fire_reports();

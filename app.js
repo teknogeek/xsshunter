@@ -53,7 +53,7 @@ const SCREENSHOTS_DIR = path.resolve(process.env.SCREENSHOTS_DIR);
 
 async function get_app_server() {
 	const app = express();
-	
+
 	if (process.env.SENTRY_ENABLED === "true") {
 		Sentry.init({
 			dsn: process.env.SENTRY_DSN,
@@ -84,7 +84,7 @@ async function get_app_server() {
 	// I have a question for Express:
 	// https://youtu.be/ZtjFsQBuJWw?t=4
 	app.set('case sensitive routing', true);
-	
+
 	app.use(bodyParser.json());
 
     // Set security-related headers on requests
@@ -103,7 +103,7 @@ async function get_app_server() {
     		},
     		"html": {
     			"type": "string",
-    			"default": "" 
+    			"default": ""
     		},
     	}
     };
@@ -134,6 +134,14 @@ async function get_app_server() {
     			"default": ""
     		},
     		"cookies": {
+    			"type": "string",
+    			"default": ""
+    		},
+    		"localStorage": {
+    			"type": "string",
+    			"default": ""
+    		},
+    		"sessionStorage": {
     			"type": "string",
     			"default": ""
     		},
@@ -218,7 +226,7 @@ async function get_app_server() {
         }
 
         console.debug(`Got payload for user id ${user.id}`);
-        
+
         const userID = user.id;
         let encrypted = false;
         if ("encrypted_data" in req.body){
@@ -315,6 +323,8 @@ async function get_app_server() {
                 referer: req.body.referrer,
                 user_agent: req.body['user-agent'],
                 cookies: req.body.cookies,
+                localStorage: req.body.localStorage,
+                sessionStorage: req.body.sessionStorage,
                 title: req.body.title,
                 secrets: JSON.parse(req.body.secrets),
                 origin: req.body.origin,
@@ -324,7 +334,7 @@ async function get_app_server() {
                 correlated_request: 'No correlated request found for this injection.',
             }
             if (req.body.CORS != "false"){
-               payload_fire_data.CORS = req.body.CORS; 
+               payload_fire_data.CORS = req.body.CORS;
             }
             if (req.body.gitExposed != "false"){
                 payload_fire_data.gitExposed = req.body.gitExposed.substring(0,5000);
@@ -355,7 +365,7 @@ async function get_app_server() {
 		}
 	});
 
-	
+
     // Set up /health handler so the user can
     // do uptime checks and appropriate alerting.
     app.get('/health', async (req, res) => {
@@ -399,7 +409,7 @@ async function get_app_server() {
         }
 
         console.log(`Got xss fetch for user id ${user.id}`);
-        
+
         let chainload_uri = user.additionalJS;
         if (! chainload_uri){
             chainload_uri = '';

